@@ -1,4 +1,5 @@
 const { Op } = require('sequelize');
+const { StatusCodes } = require('http-status-codes');
 
 class ContractsHandler {
   async getContracts(req, res) {
@@ -11,7 +12,7 @@ class ContractsHandler {
   async getContractById(req, res) {
     const { id } = req.params;
     const contracts = await req.profile.getContracts({ where: { id } });
-    if (!contracts.length) return res.status(404).end();
+    if (!contracts.length) return res.status(StatusCodes.NOT_FOUND).end();
     res.json(contracts[0]);
   }
 }

@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize');
+const { Op } = require('sequelize');
 
 const sequelize = new Sequelize({
   dialect: 'sqlite',
@@ -14,7 +15,28 @@ class Profile extends Sequelize.Model {
 
     return await Contract.findAll({
       ...options,
-      where: { ...ownContract, ...options?.where }
+      where: { ...options?.where, ...ownContract }
+    });
+  }
+
+  async getUnpaidJobs(options) {
+    const contractIds = (
+      await this.getContracts({
+        raw: true,
+        attributes: ['id'],
+        where: { status: { [Op.ne]: 'terminated' } }
+      })
+    ).map(({ id }) => id);
+
+    if (!contractIds.length) return [];
+
+    return await Job.findAll({
+      ...options,
+      where: {
+        ...options?.where,
+        paid: { [Op.ne]: true },
+        ContractId: contractIds
+      }
     });
   }
 }

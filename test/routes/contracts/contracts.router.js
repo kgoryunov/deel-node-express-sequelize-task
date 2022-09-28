@@ -1,4 +1,5 @@
 const request = require('supertest');
+const { StatusCodes } = require('http-status-codes');
 const app = require('../../../src/app');
 
 describe('Contracts Router', () => {
@@ -6,7 +7,7 @@ describe('Contracts Router', () => {
     it('returns active contracts', async () => {
       const result = await request(app).get('/contracts').set('profile_id', 2);
 
-      expect(result.status).toEqual(200);
+      expect(result.status).toEqual(StatusCodes.OK);
       expect(result.body).toEqual([
         {
           ClientId: 2,
@@ -36,7 +37,7 @@ describe('Contracts Router', () => {
         .get('/contracts/1')
         .set('profile_id', 1);
 
-      expect(result.status).toEqual(200);
+      expect(result.status).toEqual(StatusCodes.OK);
       expect(result.body).toEqual({
         ClientId: 1,
         ContractorId: 5,
@@ -51,7 +52,7 @@ describe('Contracts Router', () => {
     it('returns 401 for unauthorized request', async () => {
       const result = await request(app).get('/contracts/1');
 
-      expect(result.status).toEqual(401);
+      expect(result.status).toEqual(StatusCodes.UNAUTHORIZED);
     });
 
     it('returns 404 for non-existing contract', async () => {
@@ -59,7 +60,7 @@ describe('Contracts Router', () => {
         .get('/contracts/1001')
         .set('profile_id', 1);
 
-      expect(result.status).toEqual(404);
+      expect(result.status).toEqual(StatusCodes.NOT_FOUND);
     });
 
     it("returns 404 if contract doesn't belong to the authorized user", async () => {
@@ -67,7 +68,7 @@ describe('Contracts Router', () => {
         .get('/contracts/7')
         .set('profile_id', 1);
 
-      expect(result.status).toEqual(404);
+      expect(result.status).toEqual(StatusCodes.NOT_FOUND);
     });
   });
 });
