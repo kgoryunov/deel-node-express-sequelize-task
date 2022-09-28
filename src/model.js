@@ -5,7 +5,19 @@ const sequelize = new Sequelize({
   storage: './database.sqlite3'
 });
 
-class Profile extends Sequelize.Model {}
+class Profile extends Sequelize.Model {
+  async getContracts(options) {
+    const ownContract = {
+      client: { ClientId: this.id },
+      contractor: { ContractorId: this.id }
+    }[this.type];
+
+    return await Contract.findAll({
+      ...options,
+      where: { ...ownContract, ...options?.where }
+    });
+  }
+}
 Profile.init(
   {
     firstName: {

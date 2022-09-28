@@ -1,15 +1,18 @@
+const { Op } = require('sequelize');
+
 class ContractsHandler {
+  async getContracts(req, res) {
+    const contracts = await req.profile.getContracts({
+      where: { status: { [Op.ne]: 'terminated' } }
+    });
+    res.json(contracts);
+  }
+
   async getContractById(req, res) {
-    const { Contract } = req.app.get('models');
     const { id } = req.params;
-    const { id: profileId, type } = req.profile;
-    const ownContract = {
-      client: { ClientId: profileId },
-      contractor: { ContractorId: profileId }
-    }[type];
-    const contract = await Contract.findOne({ where: { id, ...ownContract } });
-    if (!contract) return res.status(404).end();
-    res.json(contract);
+    const contracts = await req.profile.getContracts({ where: { id } });
+    if (!contracts.length) return res.status(404).end();
+    res.json(contracts[0]);
   }
 }
 

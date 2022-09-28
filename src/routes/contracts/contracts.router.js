@@ -5,6 +5,7 @@ function getContractsRouter() {
   const router = express.Router();
   const handler = new ContractsHandler();
 
+  router.get('/', handler.getContracts);
   router.get('/:id', handler.getContractById);
 
   return router;
