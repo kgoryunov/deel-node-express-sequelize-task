@@ -33,10 +33,12 @@ Profile.init(
       allowNull: false
     },
     balance: {
-      type: Sequelize.DECIMAL(12, 2)
+      type: Sequelize.DECIMAL(12, 2),
+      allowNull: false
     },
     type: {
-      type: Sequelize.ENUM('client', 'contractor')
+      type: Sequelize.ENUM('client', 'contractor'),
+      allowNull: false
     }
   },
   {
@@ -53,7 +55,8 @@ Contract.init(
       allowNull: false
     },
     status: {
-      type: Sequelize.ENUM('new', 'in_progress', 'terminated')
+      type: Sequelize.ENUM('new', 'in_progress', 'terminated'),
+      allowNull: false
     }
   },
   {
@@ -75,7 +78,8 @@ Job.init(
     },
     paid: {
       type: Sequelize.BOOLEAN,
-      default: false
+      allowNull: false,
+      defaultValue: false
     },
     paymentDate: {
       type: Sequelize.DATE
