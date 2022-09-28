@@ -10,7 +10,8 @@
   },
   "scripts": {
     "start": "nodemon ./src/server.js",
-    "seed": "node ./scripts/seedDb.js"
+    "seed": "node ./scripts/seedDb.js",
+    "format": "prettier --write 'src/**/*.js' 'scripts/**/*.js'"
   },
   "devDependencies": {
     "concurrently": "4.1.0",
